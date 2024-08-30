@@ -20,6 +20,7 @@ def search_song(q: str = Query(..., description="The name of the song to search 
     tracks = []
     for item in results['tracks']['items']:
         track_info = {
+            'id': item['id'],
             'name': item['name'],
             'artists': [artist['name'] for artist in item['artists']],
             'album': item['album']['name'],
@@ -28,3 +29,8 @@ def search_song(q: str = Query(..., description="The name of the song to search 
         }
         tracks.append(track_info)
     return {"results": tracks}
+
+@app.get("/features")
+def get_features(track_id: str):
+    features = spotify.audio_features(track_id)[0]
+    return features
