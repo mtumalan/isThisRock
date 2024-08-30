@@ -1,0 +1,32 @@
+services:
+  front:
+    container_name: front
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./frontend:/app
+    env_file:
+      - ./frontend/.env
+    command: streamlit run main.py
+
+  api:
+    container_name: api
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    env_file:
+      - ./backend/.env
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+secrets:
+  spotify_client_id:
+    external: true
+  spotify_client_secret:
+    external: true
+
+volumes:
+  front:
+  back:
