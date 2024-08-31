@@ -129,6 +129,3 @@ celerybeat.pid
 # Docker
 *.log
 *.swp
-
-# csv
-*.csv

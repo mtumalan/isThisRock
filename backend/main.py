@@ -34,3 +34,33 @@ def search_song(q: str = Query(..., description="The name of the song to search 
 def get_features(track_id: str):
     features = spotify.audio_features(track_id)[0]
     return features
+
+@app.get("/genre")
+def get_songs_by_genre(genre: str = Query(..., description="The genre of the songs to search for")):
+    # Construct the query to search by genre
+    query = f'genre:"{genre}"'
+    
+    tracks = []
+    
+    # Fetch up to 100 tracks (Spotify API returns up to 50 tracks per request)
+    limit = 50
+    offset = 0
+    
+    while len(tracks) < 100:
+        results = spotify.search(q=query, type='track', limit=limit, offset=offset)
+        items = results['tracks']['items']
+        
+        if not items:
+            break  # Stop if no more tracks are found
+        
+        for item in items:
+            track_info = {
+                'id': item['id'],
+                'name': item['name'],
+                'artists': [artist['name'] for artist in item['artists']],
+            }
+            tracks.append(track_info)
+        
+        offset += limit  # Move to the next batch of results
+
+    return {"results": tracks[:100]}  # Return only the first 100 tracks
