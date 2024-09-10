@@ -15,10 +15,13 @@ st.set_page_config(
 
 # Initialize session state variables
 if 'page' not in st.session_state:
-    st.session_state.page = 'search'
+    st.session_state.page = 'audio'
 
 # Control the flow between pages using explicit function calls
-if st.session_state.page == 'search':
+if st.session_state.page == 'audio':
+    from pageTemplates.audio import show_audio_page
+    show_audio_page()
+elif st.session_state.page == 'search':
     from pageTemplates.search import show_search_page
     show_search_page()
 elif st.session_state.page == 'details':

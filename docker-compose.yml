@@ -1,17 +1,4 @@
 services:
-  front:
-    container_name: front
-    build: ./frontend
-    ports:
-      - "8501:8501"
-    volumes:
-      - ./frontend:/app
-    env_file:
-      - ./frontend/.env
-    command: streamlit run main.py
-    depends_on:
-      - api
-
   api:
     container_name: api
     build: ./backend
@@ -28,7 +15,3 @@ secrets:
     external: true
   spotify_client_secret:
     external: true
-
-volumes:
-  front: 
-  back:
