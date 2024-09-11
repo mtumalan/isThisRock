@@ -1,3 +1,4 @@
+
 import numpy as np
 import pandas as pd
 from keras.models import Sequential
@@ -50,8 +51,8 @@ def cargar_datos(ruta_archivo, posicion_etiqueta=-1, delete_header=False):
     return X, Y, num_features
 
 def trainModel():
-    # Cargar los datos
-    trainData, trainLabels, num_features = cargar_datos('data/3sec_real.csv', -1, True)
+    # Cargar los datoss
+    trainData, trainLabels, num_features = cargar_datos('data/3_sec_real.csv', -1, True)
 
     #trainData.to_csv('X_datos.csv', index=False)
     #Y_df = pd.DataFrame(trainLabels, columns=['Etiqueta'])
