@@ -15,7 +15,7 @@ def cargar_datos(ruta_archivo, posicion_etiqueta=-1, delete_header=False):
         df = pd.read_csv(ruta_archivo, header=None)  # Sin encabezado
     
     # Eliminar columnas no deseadas (filename, length y columnas 11 a 16)
-    columns_to_drop = [0, 1, posicion_etiqueta] + list(range(11, 18))
+    columns_to_drop = [0, 1, posicion_etiqueta] + list(range(10, 19))
     X = df.drop(columns=df.columns[columns_to_drop])
     
     # Separar las características (X) y la etiqueta (Y)
@@ -43,7 +43,8 @@ def trainModel():
     #normalizar:
     scaler = StandardScaler()
     #StandardScaler(), RobustScaler(), MinMaxScaler()
-    trainData = scaler.fit_transform(trainData)
+    trainScaler = scaler.fit(trainData)
+    trainData = trainScaler.transform(trainData)
     # Dividir los datos en conjunto de entrenamiento y prueba
     X_train, X_test, y_train, y_test = train_test_split(trainData, y, test_size=0.2, shuffle=True)
 
@@ -59,27 +60,25 @@ def trainModel():
                 metrics=['accuracy'])
 
     # Entrenar el modelo
-    model.fit(X_train,y_train, epochs=15, batch_size=200, validation_split=0.2)
+    model.fit(X_train,y_train, epochs=20, batch_size=200, validation_split=0.2)
     print(trainData)
     print(trainLabels)
     # Evaluar el modelo
     test_loss, test_acc = model.evaluate(X_test,y_test)
     print('Test accuracy:', test_acc)
-    return model
+    return model, trainScaler, encoder
 
-def predictModel(model,X_test):
+def predictModel(model,X_test, scaler):
     print("Start predictModel")
     
-    # Convertir los datos de prueba a un array de numpy de 2D
-    if len(X_test.shape) == 1:
-        X_test = X_test.reshape(1, -1)
+    # Convertir los datos de prueba a un array de numpy 2D
+    X_test = np.array(X_test).reshape(1, -1)
 
     print("Reshape X_test")
     print(X_test)
 
     # Normalizar los datos de prueba
-    scaler = StandardScaler()
-    X_test = scaler.fit_transform(X_test)
+    X_test = scaler.transform(X_test)
 
     print("Normalizar X_test")
     print(X_test)
