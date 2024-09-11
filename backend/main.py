@@ -1,14 +1,19 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Dict, Any
+from RN_2 import trainModel, predictModel
+import numpy as np
 
 app = FastAPI()
+
+model = trainModel()
 
 class Features(BaseModel):
     features: Dict[str, Any]
 
 @app.post("/predict/")
 async def get_features(features: Features):
-    print(f"Received features: {features.features}")
-    # You can return a message or process the features further
-    return {"message": "Features received successfully"}
+    X_test = np.array(list(features.features.values()))
+    print(X_test)
+    y_pred = predictModel(model, X_test)
+    return {"prediction": y_pred.tolist()}
