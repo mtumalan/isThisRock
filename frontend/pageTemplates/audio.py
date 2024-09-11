@@ -13,7 +13,7 @@ def recordAudio(duration=5, fs=44100):
                     channels=1,
                     rate=fs,
                     input=True,
-                    input_device_index=16,
+                    input_device_index=15,
                     frames_per_buffer=1024)
 
     st.write("Recording...")

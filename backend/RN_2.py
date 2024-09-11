@@ -1,39 +1,13 @@
-
 import numpy as np
 import pandas as pd
 from keras.models import Sequential
 from keras.layers import Dense
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.optimizers import Adam
-from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
-"""
-def cargar_datos(ruta_archivo, posicion_etiqueta=-1, delete_header=False):
-    # Leer el archivo CSV, manejando encabezados y delimitadores
-    df = pd.read_csv(
-        ruta_archivo, 
-        delimiter=',',  # Especifica el delimitador correcto
-        header=0 if delete_header else None,  # Manejamos el encabezado si existe
-        on_bad_lines='skip',  # Saltar las líneas con errores
-        dtype=str  # Leer todo como cadenas para evitar problemas de tipo
-    )
-    
-    # Separar las características (X) y la etiqueta (Y)
-    X = df.drop(columns=df.columns[posicion_etiqueta])
-#chroma_stft_mean,chroma_stft_var,rms_mean,rms_var,spectral_centroid_mean,spectral_centroid_var,spectral_bandwidth_mean,spectral_bandwidth_var,rolloff_mean,rolloff_var,zero_crossing_rate_mean,zero_crossing_rate_var,harmony_mean,harmony_var,perceptr_mean,perceptr_var,tempo,mfcc1_mean,mfcc1_var,mfcc2_mean,mfcc2_var,mfcc3_mean,mfcc3_var,mfcc4_mean,mfcc4_var,mfcc5_mean,mfcc5_var,mfcc6_mean,mfcc6_var,mfcc7_mean,mfcc7_var,mfcc8_mean,mfcc8_var,mfcc9_mean,mfcc9_var,mfcc10_mean,mfcc10_var,mfcc11_mean,mfcc11_var,mfcc12_mean,mfcc12_var,mfcc13_mean,mfcc13_var,mfcc14_mean,mfcc14_var,mfcc15_mean,mfcc15_var,mfcc16_mean,mfcc16_var,mfcc17_mean,mfcc17_var,mfcc18_mean,mfcc18_var,mfcc19_mean,mfcc19_var,mfcc20_mean,mfcc20_var,label
-    #rolloff_var,zero_crossing_rate_mean,zero_crossing_rate_var,harmony_mean,harmony_var,perceptr_mean,perceptr_var,
-    X = df.drop(columns=df.columns[0]) #filename
-    X = df.drop(columns=df.columns[1]) #length
+from sklearn.preprocessing import StandardScaler
 
-    for i in range(11,17):
-        X = df.drop(columns=df.columns[i])
-
-    Y = df[df.columns[posicion_etiqueta]].values
-    num_features = X.shape[1]
-    return X, Y, num_features
-"""
 def cargar_datos(ruta_archivo, posicion_etiqueta=-1, delete_header=False):
     if delete_header:
         df = pd.read_csv(ruta_archivo, header=0)  # La primera fila se usa como encabezado
@@ -52,7 +26,7 @@ def cargar_datos(ruta_archivo, posicion_etiqueta=-1, delete_header=False):
 
 def trainModel():
     # Cargar los datoss
-    trainData, trainLabels, num_features = cargar_datos('data/3_sec_real.csv', -1, True)
+    trainData, trainLabels, num_features = cargar_datos('/app/data/3_sec_real.csv', -1, True)
 
     #trainData.to_csv('X_datos.csv', index=False)
     #Y_df = pd.DataFrame(trainLabels, columns=['Etiqueta'])
@@ -94,6 +68,23 @@ def trainModel():
     return model
 
 def predictModel(model,X_test):
+    print("Start predictModel")
+    
+    # Convertir los datos de prueba a un array de numpy de 2D
+    if len(X_test.shape) == 1:
+        X_test = X_test.reshape(1, -1)
+
+    print("Reshape X_test")
+    print(X_test)
+
+    # Normalizar los datos de prueba
+    scaler = StandardScaler()
+    X_test = scaler.fit_transform(X_test)
+
+    print("Normalizar X_test")
+    print(X_test)
+
+    # Predecir las etiquetas
     y_pred = model.predict(X_test)
     y_pred = np.argmax(y_pred, axis=1)
     return y_pred
