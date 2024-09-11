@@ -5,6 +5,7 @@ import pyaudio
 import io
 import wave
 import tempfile
+import requests
 
 def recordAudio(duration=5, fs=44100):
     p = pyaudio.PyAudio()
@@ -67,6 +68,19 @@ def extract_features(wav_fp):
 
         return features_dict
 
+def send2backend(features):
+    # Convert NumPy float32 to Python float
+    features = {k: float(v) for k, v in features.items()}
+    
+    url = "http://localhost:8000/predict/"
+    response = requests.post(url, json={"features": features})
+    
+    if response.status_code == 200:
+        st.write("Features sent successfully!")
+        st.write(response.json())
+    else:
+        st.write("Error sending features to backend. Status code:", response.status_code)
+
 def show_audio_page():
     st.title("Is this Rock?")
     st.write("This model predicts whether a song is Rock or not with audio features recorded live. Try it out!")
@@ -79,4 +93,4 @@ def show_audio_page():
         # Extract features
         features = extract_features(audio_data)
         st.write("Features extracted successfully!")
-        st.write(features)
+        send2backend(features)
