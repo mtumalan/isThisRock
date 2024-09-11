@@ -16,17 +16,17 @@ def recordAudio(duration=5, fs=44100):
                     input_device_index=15,
                     frames_per_buffer=1024)
 
-    st.write("Recording...")
     frames = []
-
-    for _ in range(0, int(fs / 1024 * duration)):
-        data = stream.read(1024)
-        frames.append(data)
-
-    st.write("Recording finished.")
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
+    try:
+        st.write("Recording...")
+        for _ in range(0, int(fs / 1024 * duration)):
+            data = stream.read(1024)
+            frames.append(data)
+        st.write("Recording finished.")
+    finally:
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
 
     wav_fp = io.BytesIO()
     wf = wave.open(wav_fp, 'wb')
@@ -85,7 +85,7 @@ def show_audio_page():
     st.title("Is this Rock?")
     st.write("This model predicts whether a song is Rock or not with audio features recorded live. Try it out!")
 
-    duration = st.slider("Recording Duration (seconds)", 1, 10, 5)
+    duration = st.slider("Recording Duration (seconds)", 10, 30, 20)
 
     if st.button("Record"):
         audio_data = recordAudio(duration)
