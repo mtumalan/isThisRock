@@ -45,6 +45,10 @@ def trainModel():
     #StandardScaler(), RobustScaler(), MinMaxScaler()
     trainScaler = scaler.fit(trainData)
     trainData = trainScaler.transform(trainData)
+    #Guardar todos los datos en un dataframe y exportar a un archivo csv
+    trainDF = pd.DataFrame(trainData)
+    trainDF['Etiqueta'] = y
+    trainDF.to_csv('/app/data/trainData.csv', index=False)
     # Dividir los datos en conjunto de entrenamiento y prueba
     X_train, X_test, y_train, y_test = train_test_split(trainData, y, test_size=0.2, shuffle=True)
 
