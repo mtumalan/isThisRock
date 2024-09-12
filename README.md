@@ -1,4 +1,4 @@
-# Music Genre Classification with Neural Networks
+# Is This Rock?
 
 ## Project Overview
 
@@ -74,14 +74,14 @@ The model is trained using the **Adam** optimizer and **categorical cross-entrop
     ```
     
 3. Start the backend
-  ```bash
-  docker-compose up --build
-  ```
+      ```bash
+      docker-compose up --build
+      ```
 
 4. Navigate to the frontend directory:
-  ```bash
-  cd frontend
-  ```
+      ```bash
+      cd frontend
+      ```
 
 5. Install dependencies:
     ```bash
