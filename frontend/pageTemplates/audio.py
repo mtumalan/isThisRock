@@ -14,7 +14,6 @@ def recordAudio(duration=5, fs=44100):
                     channels=1,
                     rate=fs,
                     input=True,
-                    input_device_index=16,
                     frames_per_buffer=1024)
 
     frames = []
