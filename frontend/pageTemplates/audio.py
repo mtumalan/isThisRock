@@ -7,13 +7,14 @@ import wave
 import tempfile
 import requests
 
+# Record audio function
 def recordAudio(duration=5, fs=44100):
     p = pyaudio.PyAudio()
     stream = p.open(format=pyaudio.paInt16,
                     channels=1,
                     rate=fs,
                     input=True,
-                    input_device_index=15,
+                    input_device_index=16,
                     frames_per_buffer=1024)
 
     frames = []
@@ -38,6 +39,7 @@ def recordAudio(duration=5, fs=44100):
 
     return wav_fp
 
+# Extract features function
 def extract_features(wav_fp):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp:
         temp.write(wav_fp.getvalue())
@@ -68,6 +70,7 @@ def extract_features(wav_fp):
 
         return features_dict
 
+# Send data to backend function
 def send2backend(features):
     # Convert NumPy float32 to Python float
     features = {k: float(v) for k, v in features.items()}
@@ -76,11 +79,12 @@ def send2backend(features):
     response = requests.post(url, json={"features": features})
     
     if response.status_code == 200:
-        st.write("Features sent successfully!")
-        st.write(response.json())
+        return response.json()  # Get the prediction result
     else:
         st.write("Error sending features to backend. Status code:", response.status_code)
+        return None
 
+# Main page function
 def show_audio_page():
     st.title("Is this Rock?")
     st.write("This model predicts whether a song is Rock or not with audio features recorded live. Try it out!")
@@ -93,4 +97,21 @@ def show_audio_page():
         # Extract features
         features = extract_features(audio_data)
         st.write("Features extracted successfully!")
-        send2backend(features)
+
+        # Send features to backend and get prediction result
+        prediction = send2backend(features)
+        print(prediction)
+
+        # Check the result and display the corresponding message and image
+        if prediction:
+            genre = prediction.get("prediction", "Unknown")
+            if isinstance(genre, list):
+                genre = genre[0]
+
+            if genre == "rock":
+                st.write("This is Rock! Awesome!")
+                st.image("pageTemplates/static/tarazona.jpg", caption="Tarazona Approved")
+            else:
+                st.write(f"This is not Rock. It is {genre}. Maybe next time.")
+        else:
+            st.write("Failed to get a prediction.")
