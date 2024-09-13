@@ -33,22 +33,17 @@ image_fragoso = Image.open("pages/static/fragoso.jpg")
 image_soto = Image.open("pages/static/soto.jpg")
 
 # Create a centered layout with empty columns on the sides
-col1, col2, col3, col4, col5 = st.columns([1, 2, 2, 2, 1])
+col1, col2, col3, col4, col5 = st.columns([1, 2, 1, 2, 1])
 
 with col2:
     st.image(image_mt, width=100)
     st.markdown("[Mauricio Tumalan](https://github.com/mtumalan)", unsafe_allow_html=True)
-    st.write("Computer Science and Technology Student")
-
-with col3:
-    st.image(image_fragoso, width=100)
-    st.markdown("[Carlos Fragoso](https://github.com/carlosfragoso21)", unsafe_allow_html=True)
-    st.write("Computer Science and Technology Student")
+    st.write("Computer Science and Technology Student - Live Feature Extraction and Full Stack Integration")
 
 with col4:
-    st.image(image_soto, width=100)
-    st.markdown("[Carlos Soto](https://github.com/CSA09)", unsafe_allow_html=True)
-    st.write("Computer Science and Technology Student")
+    st.image(image_fragoso, width=100)
+    st.markdown("[Carlos Fragoso](https://github.com/carlosfragoso21)", unsafe_allow_html=True)
+    st.write("Computer Science and Technology Student - Neural Network Development, Feature Cleansing and Training")
 
 # Special Thanks Section
 st.header("Special Thanks")
