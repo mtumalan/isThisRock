@@ -109,3 +109,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - The **GTZAN Dataset** provided by George Tzanetakis.
 - The **Librosa** and **PyAudio** libraries for feature extraction and audio capture.
+
+## Contributors
+
+- Carlos Fragoso
+- Mauricio Tumalan
