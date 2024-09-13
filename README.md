@@ -109,7 +109,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - The **GTZAN Dataset** provided by George Tzanetakis.
 - The **Librosa** and **PyAudio** libraries for feature extraction and audio capture.
-- Our professors, Victor de la Cueva, Esteban Castillo and Gualberto Aguilar
+- Our professors, Victor de la Cueva, Esteban Castillo and Gualberto Aguilar.
 
 ## Contributors
 
