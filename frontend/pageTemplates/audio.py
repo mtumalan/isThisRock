@@ -15,6 +15,9 @@ def recordAudio(duration=5, fs=44100):
                     rate=fs,
                     input=True,
                     frames_per_buffer=1024)
+    
+    print("Default input device info:")
+    print(pyaudio.PyAudio().get_default_input_device_info())
 
     frames = []
     try:
